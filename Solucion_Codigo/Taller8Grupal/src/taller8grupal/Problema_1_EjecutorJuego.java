@@ -1,14 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
-package trabajogrupal;
-
-/**
- *
- * @author UTPL
- */
-public class Problema1_JuegoRoles {
+package taller8grupal;
+public class Problema_1_EjecutorJuego {
 
     static Personaje guerrero;
     static Personaje mago;
@@ -30,50 +21,50 @@ public class Problema1_JuegoRoles {
 
     public static void pelea(Personaje atacante, Personaje defensor) {
         boolean gana = atacante.ataque(defensor);
-         if (guerrero.ataque(mago)) {
-        guerrero.experiencia++;
-        guerrero.batallasGana++;
-        mago.vidas = mago.defensa() - 1;
-        System.out.println("Ganó: " + guerrero.getNombre());
-    } else {
-        mago.experiencia++;
-        mago.batallasGana++;
-        guerrero.vidas = guerrero.defensa() - 1;
-        System.out.println("Ganó: " + mago.getNombre());
-    }
+        if (guerrero.ataque(mago)) {
+            guerrero.experiencia++;
+            guerrero.batallasGana++;
+            mago.vidas = mago.defensa() - 1;
+            System.out.println("Ganó: " + guerrero.getNombre());
+        } else {
+            mago.experiencia++;
+            mago.batallasGana++;
+            guerrero.vidas = guerrero.defensa() - 1;
+            System.out.println("Ganó: " + mago.getNombre());
+        }
 
-    System.out.println("Ahora arquero vs guerrero:");
-    if (arquero.ataque(guerrero)) {
-        arquero.experiencia++;
-        arquero.batallasGana++;
-        guerrero.vidas = guerrero.defensa() - 1;
-        System.out.println("Ganó: " + arquero.getNombre());
-    } else {
-        guerrero.experiencia++;
-        guerrero.batallasGana++;
-        arquero.vidas = arquero.defensa() - 1;
-        System.out.println("Ganó: " + guerrero.getNombre());
-    }
+        System.out.println("Ahora arquero vs guerrero:");
+        if (arquero.ataque(guerrero)) {
+            arquero.experiencia++;
+            arquero.batallasGana++;
+            guerrero.vidas = guerrero.defensa() - 1;
+            System.out.println("Ganó: " + arquero.getNombre());
+        } else {
+            guerrero.experiencia++;
+            guerrero.batallasGana++;
+            arquero.vidas = arquero.defensa() - 1;
+            System.out.println("Ganó: " + guerrero.getNombre());
+        }
 
-    System.out.println("arquero contra mago:");
-    if (arquero.ataque(mago)) {
-        arquero.experiencia++;
-        arquero.batallasGana++;
-        mago.vidas = mago.defensa() - 1;
-        System.out.println("Ganó: " + arquero.getNombre());
-    } else {
-        mago.experiencia++;
-        mago.batallasGana++;
-        arquero.vidas = arquero.defensa() - 1;
-        System.out.println("Ganó: " + mago.getNombre());
-    }
+        System.out.println("arquero contra mago:");
+        if (arquero.ataque(mago)) {
+            arquero.experiencia++;
+            arquero.batallasGana++;
+            mago.vidas = mago.defensa() - 1;
+            System.out.println("Ganó: " + arquero.getNombre());
+        } else {
+            mago.experiencia++;
+            mago.batallasGana++;
+            arquero.vidas = arquero.defensa() - 1;
+            System.out.println("Ganó: " + mago.getNombre());
+        }
 
-    System.out.println("");
-    System.out.println("Estado final:");
-    System.out.println("Guerrero: " + guerrero);
-    System.out.println("Mago: " + mago);
-    System.out.println("Arquero: " + arquero);
-}
+        System.out.println("");
+        System.out.println("Estado final:");
+        System.out.println("Guerrero: " + guerrero);
+        System.out.println("Mago: " + mago);
+        System.out.println("Arquero: " + arquero);
+    }
 }
 
 abstract class Personaje {
