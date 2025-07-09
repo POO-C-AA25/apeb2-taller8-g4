@@ -1,157 +1,176 @@
 package taller8grupal;
-
 import java.util.ArrayList;
 
 public class Problema_2_EjecutorMenu {
 
     public static void main(String[] args) {
-        
+        Cuenta cuenta = new Cuenta("Juliana", 12);
 
+        MenuCarta menuCarta = new MenuCarta("Pollo BBQ", 5.0, 2.0, 1.5, 10);
+        MenuDelDia menuDia = new MenuDelDia("Arroz con menestra", 4.0, 1.0, 1.2);
+        MenuNinos menuNino = new MenuNinos("Nuggets", 3.5, 1.0, 1.0);
+        MenuEconomico menuEco = new MenuEconomico("Sopa de verduras", 6.0, 15);
+
+        cuenta.agregarMenu(menuCarta);
+        cuenta.agregarMenu(menuDia);
+        cuenta.agregarMenu(menuNino);
+        cuenta.agregarMenu(menuEco);
+
+        cuenta.calcularValores();
+
+        System.out.println(cuenta);
     }
 
-    class Cuenta {
+    
+    static class Cuenta {
+        private String nombreCliente;
+        private ArrayList<Menu> listadoMenus = new ArrayList<>();
+        private double subtotal;
+        private double valorCancelar;
+        private int IVA;
 
-        public String nombreCliente;
-        ArrayList<Menu> listadoMenus = new ArrayList<>();
-        public double valorCancelar;
-        public double subtotal;
-        public int IVA;
+        public Cuenta(String nombreCliente, int IVA) {
+            this.nombreCliente = nombreCliente;
+            this.IVA = IVA;
+        }
 
-        public Cuenta() {
+        public void agregarMenu(Menu menu) {
+            listadoMenus.add(menu);
+        }
 
+        public void calcularValores() {
+            subtotal = 0;
+            for (Menu m : listadoMenus) {
+                subtotal += m.calcularValorPlato();
+            }
+            valorCancelar = subtotal + (subtotal * IVA / 100.0);
         }
 
         @Override
         public String toString() {
-            return "cuenta{" + "nombreCliente=" + nombreCliente + ", listadoMenus=" + listadoMenus + ", valorCancelar=" + valorCancelar + ", subtotal=" + subtotal + ", IVA=" + IVA + '}';
+            StringBuilder sb = new StringBuilder();
+            sb.append("Cuenta de: ").append(nombreCliente).append("\n");
+            for (Menu m : listadoMenus) {
+                sb.append(m).append("\n");
+            }
+            sb.append(String.format("Subtotal: $%.2f\nIVA: %d%%\nTotal a pagar: $%.2f\n",
+                    subtotal, IVA, valorCancelar));
+            return sb.toString();
         }
-
     }
 
-    abstract class Menu {
+    static abstract class Menu {
+        protected String nombrePlato;
+        protected double valorInicialMenu;
+        protected double valorMenu;
 
-        public String nombrePlato;
-        public double valorMenu;
-        public double valorInicialMenu;
-
-        public Menu() {
-        }
-
-        public Menu(String nombrePlato, double valorMenu, double valorInicialMenu) {
+        public Menu(String nombrePlato, double valorInicialMenu) {
             this.nombrePlato = nombrePlato;
-            this.valorMenu = valorMenu;
             this.valorInicialMenu = valorInicialMenu;
         }
 
-        public abstract double calcularValorPlato(Menu menu);
+        public abstract double calcularValorPlato();
 
         @Override
         public String toString() {
-            return "Menu{" + "nombrePlato=" + nombrePlato + ", valorMenu=" + valorMenu + ", valorInicialMenu=" + valorInicialMenu + '}';
+            return String.format("Plato: %s | Valor final: $%.2f", nombrePlato, valorMenu);
         }
     }
 
-    class MenuCarta extends Menu {
+    static class MenuCarta extends Menu {
+        private double valorPorcionGuarnicion;
+        private double valorBebida;
+        private int porcentajeAdicional;
 
-        public double valorPorcionGuarnicion;
-        public double valorBebida;
-        public int porcentajeAdicional;
-
-        public MenuCarta() {
-        }
-
-        public MenuCarta(double valorPorcionGuarnicion, double valorBebida, int porcentajeAdicional, String nombrePlato, double valorMenu, double valorInicialMenu) {
-            super(nombrePlato, valorMenu, valorInicialMenu);
+        public MenuCarta(String nombrePlato, double valorInicialMenu,
+                         double valorPorcionGuarnicion, double valorBebida, int porcentajeAdicional) {
+            super(nombrePlato, valorInicialMenu);
             this.valorPorcionGuarnicion = valorPorcionGuarnicion;
             this.valorBebida = valorBebida;
             this.porcentajeAdicional = porcentajeAdicional;
         }
 
-        public double calcularValorPlato(Menu menu) {
-
-            return 0;
+        @Override
+        public double calcularValorPlato() {
+            valorMenu = valorInicialMenu + valorPorcionGuarnicion + valorBebida +
+                        (valorInicialMenu * porcentajeAdicional / 100.0);
+            return valorMenu;
         }
 
         @Override
         public String toString() {
-            return "MenuCarta{" + "valorPorcionGuarnicion=" + valorPorcionGuarnicion + ", valorBebida=" + valorBebida + ", porcentajeAdicional=" + porcentajeAdicional + '}';
+            return super.toString() + String.format(" (Carta: guarnición $%.2f, bebida $%.2f, %d%% extra)",
+                    valorPorcionGuarnicion, valorBebida, porcentajeAdicional);
         }
     }
 
-    class MenuDelDia extends Menu {
+    static class MenuDelDia extends Menu {
+        private double valorPostre;
+        private double valorBebida;
 
-        public double valorPostre;
-        public double valorBebida;
-
-        public MenuDelDia() {
-        }
-
-        public MenuDelDia(double valorPostre, double valorBebida, String nombrePlato, double valorMenu, double valorInicialMenu) {
-            super(nombrePlato, valorMenu, valorInicialMenu);
+        public MenuDelDia(String nombrePlato, double valorInicialMenu,
+                          double valorPostre, double valorBebida) {
+            super(nombrePlato, valorInicialMenu);
             this.valorPostre = valorPostre;
             this.valorBebida = valorBebida;
         }
 
-        public double calcularValorPlato(Menu menu) {
-
-            return 0;
+        @Override
+        public double calcularValorPlato() {
+            valorMenu = valorInicialMenu + valorPostre + valorBebida;
+            return valorMenu;
         }
 
         @Override
         public String toString() {
-            return "MenuDelDia{" + "valorPostre=" + valorPostre + ", valorBebida=" + valorBebida + '}';
+            return super.toString() + String.format(" (Día: postre $%.2f, bebida $%.2f)",
+                    valorPostre, valorBebida);
         }
-
     }
 
-    class MenuNinos extends Menu {
+    static class MenuNinos extends Menu {
+        private double valorPorcionHelado;
+        private double valorPorcionPastel;
 
-        public double valorPorcionHelado;
-        public double valorPorcionPastel;
-
-        public MenuNinos() {
-        }
-
-        public MenuNinos(double valorPorcionHelado, double valorPorcionPastel, String nombrePlato, double valorMenu, double valorInicialMenu) {
-            super(nombrePlato, valorMenu, valorInicialMenu);
+        public MenuNinos(String nombrePlato, double valorInicialMenu,
+                         double valorPorcionHelado, double valorPorcionPastel) {
+            super(nombrePlato, valorInicialMenu);
             this.valorPorcionHelado = valorPorcionHelado;
             this.valorPorcionPastel = valorPorcionPastel;
         }
 
-        public double calcularValorPlato(Menu menu) {
-
-            return 0;
+        @Override
+        public double calcularValorPlato() {
+            valorMenu = valorInicialMenu + valorPorcionHelado + valorPorcionPastel;
+            return valorMenu;
         }
 
         @Override
         public String toString() {
-            return "MenuNinos{" + "valorPorcionHelado=" + valorPorcionHelado + ", valorPorcionPastel=" + valorPorcionPastel + '}';
+            return super.toString() + String.format(" (Niños: helado $%.2f, pastel $%.2f)",
+                    valorPorcionHelado, valorPorcionPastel);
         }
-
     }
 
-    class MenuEconomico extends Menu {
+    static class MenuEconomico extends Menu {
+        private int porcentajeDescuento;
 
-        public int porcentajeDescuento;
-
-        public MenuEconomico() {
-        }
-
-        public MenuEconomico(int porcentajeDescuento, String nombrePlato, double valorMenu, double valorInicialMenu) {
-            super(nombrePlato, valorMenu, valorInicialMenu);
+        public MenuEconomico(String nombrePlato, double valorInicialMenu,
+                             int porcentajeDescuento) {
+            super(nombrePlato, valorInicialMenu);
             this.porcentajeDescuento = porcentajeDescuento;
         }
 
-        public double calcularValorPlato(Menu menu) {
-
-            return 0;
+        @Override
+        public double calcularValorPlato() {
+            valorMenu = valorInicialMenu - (valorInicialMenu * porcentajeDescuento / 100.0);
+            return valorMenu;
         }
 
         @Override
         public String toString() {
-            return "MenuEconomico{" + "porcentajeDescuento=" + porcentajeDescuento + '}';
+            return super.toString() + String.format(" (Económico: %d%% descuento)",
+                    porcentajeDescuento);
         }
-
     }
-
 }
